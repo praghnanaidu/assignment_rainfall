@@ -1,0 +1,131 @@
+#1. Convert the given CSV file into JSON-Lines file and save to a new json-lines file with the name 'rainfall_india_1901-2015.jl'.
+# For more details on json-lines format visit here: http://jsonlines.org/
+
+jsonfile = open('C:/Users/Praghna/Desktop/rainfall_india_1901-2015.txt', 'w')
+
+fieldnames = ("SUBDIVISION","YEAR","JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC","ANNUAL")
+e = open('C:/Users/Praghna/Desktop/data/rainfall_india_1901-2015.csv', 'r')
+
+eh=e.readline()
+
+eh1=eh.strip().split(',')
+new2=eh1[2:14]
+elines=e.readlines()
+
+json=[]
+res=[]
+res2=[]
+res3=[]
+res4=[]
+res5={}
+avg=[]
+jan=[]
+feb=[]
+mar=[]
+apl=[]
+may=[]
+june=[]
+july=[]
+aug=[]
+sep=[]
+oct=[]
+nov=[]
+dec=[]
+jan1={}
+
+#task1:Convert the given CSV file into JSON-Lines file and save to a new json-lines file with the name 'rainfall_india_1901-2015.jl'. For more details on json-lines format visit here: http://jsonlines.org/
+
+for line in elines:
+    w=line.strip().split(',')
+    
+    for i in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]:
+        m1='"'+fieldnames[i]+'"'
+        
+        m2=":"
+        m3='"'+w[i]+'"'
+        
+
+        json.append(m1+m2+m3)
+        json1=(','.join(json)+"}"+"\n")
+        
+    jsonfile.write("{")
+    jsonfile.write(json1)
+    jsonfile.write("\n")
+    json=[]
+
+
+    place=w[0]
+    annual=w[14]
+    new1=[w[2],w[3],w[4],w[5],w[6],w[7],w[8],w[9],w[10],w[11],w[12],w[13]]
+   
+    
+#4.Display the top 3 months on which KERALA state usually gets higher rainfall than other months.
+    
+    for i,k in zip([2,3,4,5,6,7,8,9,10,11,12,13],[jan,feb,mar,apl,may,june,july,aug,sep,oct,nov,dec]):
+
+      if((place.find("KERALA")!=-1)):
+        
+        k.append(w[i])
+        
+        janavg=[int(float(v)) for v in k]
+        avg1=sum(janavg)/len(k)
+        
+        jan1[i]=avg1
+        
+        
+        
+#2. What is the average annual rainfall of 'COASTAL KARNATAKA' subdivision?
+   
+    if(place=='COASTAL KARNATAKA' and annual!='NA'):
+      rain=float(w[14])
+      res.append(rain)
+  
+#3. Display all the subdivisions of KARNATAKA state in descending order of their average annual rainfall.
+     
+    if((place.find("KARNATAKA")!=-1) and annual!='NA'):
+    
+      rain=float(annual)
+      pair=(rain,place)
+      res2.append(pair)
+    
+
+#5.What are the 4 months in which, MOST OF the subdivisions see the lowest rainfall
+
+    p=sorted(zip(new1,new2))[:4]
+    a,b = map(list,zip(*p))
+    res4.append(b)
+    
+flat_list = [item for sublist in res4 for item in sublist]
+
+for i in flat_list:
+    
+   j=i
+   if res5.get(j)==None:
+        res5[j]=1
+   else:
+        res5[j]+=1
+abc=sorted(zip(res5.values(),res5.keys()),reverse= True)[:4]
+
+total=sum(res)
+average=total/len(res)
+
+jsonfile.close()
+
+
+l=sorted(zip(jan1.values(),["jan","feb","mar","april","may","jun","july","aug","sep","oct","nov","dec"]))[9:14]
+
+
+print("The average annual rainfall in subdivision COASTAL KARNATAKA is ",average,"\n")
+print("\n Subdivisions of KARNATAKA state in descending order of their average annual rainfall are ",sorted(res2, reverse = True),"\n")
+print("\n Top 3 months on which KERALA state usually gets higher rainfall than other months","of ",[v[1] for v in l],"\n")
+print("\n 4 months in which, MOST OF the subdivisions see the lowest rainfall are",[v[1] for v in abc],"\n")
+
+
+
+
+
+
+    
+
+    
+    
